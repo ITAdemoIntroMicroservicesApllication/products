@@ -50,6 +50,7 @@ if __name__ == "__main__":
 
 
 BASE_URL = "https://dummyjson.com"
+
 @app.route('/products', methods=['GET'])
 @token_required
 def get_products(current_user_id):
