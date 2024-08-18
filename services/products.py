@@ -55,13 +55,15 @@ with open('users.json', 'r') as f:
 
 @app.route('/auth', methods=['POST'])
 def authenticate_user():
-    if request.headers['Content-Type'] != 'application/json':
+    content_type = request.headers.get('Content-Type')
+    if content_type != 'application/json':
         return jsonify({'error': 'Unsupported Media Type'}), 415
+    
     username = request.json.get('username')
     password = request.json.get('password')
     for user in users:
         if user['username'] == username and user['password'] == password:
-            token = jwt.encode({'user_id': user['id']}, app.config['SECRET_KEY'],algorithm="HS256")
+            token = jwt.encode({'user_id': user['id']}, app.config['SECRET_KEY'], algorithm="HS256")
             response = make_response(jsonify({'message': 'Authentication successful'}))
             response.set_cookie('token', token)
             return response, 200
